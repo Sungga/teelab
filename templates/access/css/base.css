@@ -1,0 +1,94 @@
+:root {
+    --header-height: 60px;
+    
+    --header-color: rgba(255, 255, 255, 0.5);
+    --color-bold: #221F20;
+    --color-medium: #727272;
+    --color-pale: #b2b2b2;
+    --color-white: #fff;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+.grid {
+    width: 1380px;
+    margin: auto;
+}
+
+a {
+    text-decoration: none;
+}
+
+.path {
+    margin: 40px 0;
+}
+
+.path a,
+.path span {
+    color: #000;
+    font-size: 14px;
+    margin-right: 8px;
+}
+
+li {
+    list-style: none;
+}
+
+.yellow,
+.green,
+.pink,
+.red,
+.gray,
+.white,
+.brown,
+.black {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
+
+
+
+input[type="radio"] + label.yellow {
+    background-color: yellow;
+}
+
+input[type="radio"] + label.green {
+    background-color: green;
+}
+
+input[type="radio"] + label.pink {
+    background-color: pink;
+}
+
+input[type="radio"] + label.red {
+    background-color: red;
+}
+
+input[type="radio"] + label.gray {
+    background-color: gray;
+}
+
+input[type="radio"] + label.white {
+    background-color: white;
+}
+
+input[type="radio"] + label.brown {
+    background-color: brown;
+}
+
+input[type="radio"] + label.black {
+    background-color: black;
+}
+
+
+
+
+
