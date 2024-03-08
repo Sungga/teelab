@@ -12,5 +12,9 @@
                         <h1>Sản phẩm</h1>
                         <li><a href="./index.php?controller=admin&page=add_product">Thêm sản phẩm</a></li>
                         <li><a href="./index.php?controller=admin&page=list_product">Danh sách sản phẩm</a></li>
+                        <h1>Ảnh bìa</h1>
+                        <li><a href="./index.php?controller=admin&page=add_website_cover">Thêm ảnh bìa trang web</a></li>
+                        <li><a href="./index.php?controller=admin&page=list_website_cover">Danh sách ảnh bìa trang web</a></li>
+                        <br>
                     </ul>
                 </div>

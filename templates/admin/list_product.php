@@ -101,7 +101,7 @@
 
     .admin__list-product--desc {
         width: 400px;
-        height: 200px;
+        height: 100%;
         overflow: scroll;
         
         padding: 8px;
@@ -114,7 +114,7 @@
 
     .admin__list-product--img {
         width: 400px;
-        height: 200px;
+        height: 100%;
         overflow: scroll;
 
         flex-wrap: wrap;

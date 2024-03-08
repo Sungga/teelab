@@ -50,7 +50,8 @@ class website {
     }
 
     public function getProducts_w_productTypeId($product_type_id) {
-        $sql = "SELECT * FROM tbl_product WHERE product_type_id = '$product_type_id'";
+        $sql = "SELECT * FROM tbl_product WHERE product_type_id = '$product_type_id' ORDER BY product_id DESC";
+        // $sql = "SELECT * FROM tbl_product WHERE product_type_id = '$product_type_id' ORDER BY product_id ASC";
         $result = $this->db->getRows($sql);
 
         return $result;
@@ -179,6 +180,23 @@ class website {
             $arr += $result;
         }
 
+        // Hàm so sánh dựa trên product_id từ cao xuống thấp
+        function compareByIdHighToLow($a, $b) {
+            return $b['product_id'] - $a['product_id'];
+        }
+        
+        // Sắp xếp mảng sử dụng hàm so sánh product_id từ cao xuống thấp
+        usort($arr, 'compareByIdHighToLow');
+
         return $arr;
+    }
+
+    // Lay anh bia trang web
+    public function getWebsiteCovers() {
+        $sql = "SELECT * FROM tbl_website_cover";
+
+        $result = $this->db->getRows($sql);
+
+        return $result;
     }
 }

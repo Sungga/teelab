@@ -102,12 +102,48 @@
                 <div class="list-product__right">
                     <div class="list-product__right--top">
                         <h3>Áo</h3>
-                        <select>
-                            <option value="moinhat">Mới nhất</option>
-                            <option value="moinhat">Cũ nhất</option>
-                            <option value="moinhat">Giá cao đến thấp</option>
-                            <option value="moinhat">Giá thấp đến cao</option>
-                        </select>
+                        <div class="list-product__select">
+                            <div>
+                                <?php
+                                    $arrange = '';
+                                    if(isset($_GET['arrange'])) {
+                                        switch($_GET['arrange']) {
+                                            case 'Latest':{
+                                                $arrange = 'Latest';
+                                                echo "<p>Mới nhất</p>";
+                                                break;
+                                            }
+                                            case 'Oldest':{
+                                                $arrange = 'Oldest';
+                                                echo "<p>Cũ nhất</p>";
+                                                break;
+                                            }
+                                            case 'LowToHigh':{
+                                                $arrange = 'LowToHigh';
+                                                echo "<p>Giá thấp đến cao</p>";
+                                                break;
+                                            }
+                                            case 'HighToLow':{
+                                                $arrange = 'HighToLow';
+                                                echo "<p>Giá cao đến thấp</p>";
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        echo "<p>Mới nhất</p>";
+                                    }
+                                    ?>
+                            </div>
+                            <form action="" method="POST">
+                                <div class="list-product__option">
+                                    <input type="submit" name="arrange" value="Mới nhất" class="<?php echo $arrange == 'Latest' || $arrange == '' ? 'bold' : '' ?>">
+                                    <input type="submit" name="arrange" value="Cũ nhất" class="<?php echo $arrange == 'Oldest' ? 'bold' : '' ?>">
+                                    <input type="submit" name="arrange" value="Giá thấp đến cao" class="<?php echo $arrange == 'LowToHigh' ? 'bold' : '' ?>">
+                                    <input type="submit" name="arrange" value="Giá cao đến thấp" class="<?php echo $arrange == 'HighToLow' ? 'bold' : '' ?>">
+                                </div>
+                            </form>
+                        </div>
                     </div>
                     
                     <div class="list-product__right--center">
@@ -260,3 +296,11 @@
     </section>
 
     <script src="./templates/access/js/js_list_product.js"></script>
+
+    <script>
+
+    </script>
+
+    <style>
+
+    </style>

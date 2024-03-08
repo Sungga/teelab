@@ -19,8 +19,14 @@ class controllerWebsite {
 
             $product_type = $this->model->getProductType($_GET['product_type_id']);
             $category = $this->model->getCategory($product_type['category_id']);
-            $products = $this->model->getProducts_w_productTypeId($_GET['product_type_id']);
             $colors = $this->model->getColors();
+            if(isset($_GET['arrange'])) {
+                $arr = $this->model->getProducts_w_productTypeId($_GET['product_type_id']);
+                $products = $this->changeSortMethod($_GET['arrange'], $arr);
+            }
+            else {
+                $products = $this->model->getProducts_w_productTypeId($_GET['product_type_id']);
+            }
 
             $this->view->productType($categories, $product_types, $product_type, $category, $products, $colors);
             $this->searchProduct();
@@ -45,6 +51,8 @@ class controllerWebsite {
                         echo "<script>alert('Bạn cần đăng nhập trước khi thêm giỏ hàng!');</script>";
                     }
                 }
+
+                $this->selectSortMethod();
             }
         }
         else {
@@ -59,8 +67,16 @@ class controllerWebsite {
 
             $product_type['product_type_name'] = $_GET['product_type_name'];
             $category['category_name'] = '(Search)';
-            $products = $this->model->searchProduct($_GET['product_type_name']);
+            // $products = $this->model->searchProduct($_GET['product_type_name']);
             $colors = $this->model->getColors();
+
+            if(isset($_GET['arrange'])) {
+                $arr = $this->model->searchProduct($_GET['product_type_name']);
+                $products = $this->changeSortMethod($_GET['arrange'], $arr);
+            }
+            else {
+                $products = $this->model->searchProduct($_GET['product_type_name']);
+            }
 
             $this->view->productType($categories, $product_types, $product_type, $category, $products, $colors);
             $this->searchProduct();
@@ -85,10 +101,78 @@ class controllerWebsite {
                         echo "<script>alert('Bạn cần đăng nhập trước khi thêm giỏ hàng!');</script>";
                     }
                 }
+
+                $this->selectSortMethod();
             }
         }
         else {
             header('location: .');
+        }
+    }
+
+    // ham de nguoi dung chon cach sap xep san pham
+    public function selectSortMethod() {
+        if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['arrange'])) {
+            $arrange = '';
+            switch ($_POST['arrange']) {
+                case 'Mới nhất':
+                    $arrange = 'Latest';
+                    break;
+                case 'Cũ nhất':
+                    $arrange = 'Oldest';
+                    break;
+                case 'Giá thấp đến cao':
+                    $arrange = 'LowToHigh';
+                    break;
+                case 'Giá cao đến thấp':
+                    $arrange = 'HighToLow';
+                    break;
+                default:
+                    $arrange = '';
+            }
+
+            $product_type_id = isset($_GET['product_type_id']) ? $_GET['product_type_id'] : 0;
+            $product_type_name = isset($_GET['product_type_name']) ? $_GET['product_type_name'] : 0;
+            $p = isset($_GET['p']) ? $_GET['p'] : 0;
+            
+            if(isset($_GET['product_type_id'])) {
+                echo "<script>window.location.href = './index.php?controller=website&page=product_type&product_type_id=$product_type_id&p=$p&arrange=$arrange';</script>";
+            }
+            elseif(isset($_GET['product_type_name'])) {
+                echo "<script>window.location.href = './index.php?controller=website&page=product_type_search&product_type_name=$product_type_name&p=$p&arrange=$arrange';</script>";
+            }
+            // echo "<script>alert('".$_POST['arrange']."');</script>";
+        }
+    }
+    
+    // ham chon sap xep cac san pham theo kieu ma ng dung chon
+    public function changeSortMethod($method, $products) {
+        switch ($method) {
+            case 'Latest':
+                return $products;
+            case 'Oldest':
+                return array_reverse($products);
+            case 'LowToHigh':
+                function compareByNewPriceLowToHigh($a, $b) {
+                    return $a['product_price_new'] - $b['product_price_new'];
+                }
+                
+                // Sắp xếp mảng sử dụng hàm so sánh giá mới (từ thấp đến cao)
+                usort($products, 'compareByNewPriceLowToHigh');
+
+                return $products;
+            case 'HighToLow':
+                // Hàm so sánh dựa trên giá mới
+                function compareByNewPrice($a, $b) {
+                    return $b['product_price_new'] - $a['product_price_new'];
+                }
+
+                // Sắp xếp mảng sử dụng hàm so sánh giá mới
+                usort($products, 'compareByNewPrice');
+
+                return $products;
+            default:
+                return $products;
         }
     }
 
@@ -389,8 +473,9 @@ class controllerWebsite {
     public function home() {
         $categories = $this->model->getCategories();
         $product_types = $this->model->getProductTypes();
+        $website_covers = $this->model->getWebsiteCovers();
 
-        $this->view->home($categories, $product_types);
+        $this->view->home($categories, $product_types, $website_covers);
         $this->searchProduct();
     }
 

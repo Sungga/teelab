@@ -93,3 +93,17 @@ productPriceNew.forEach(function(item, index) {
     let formattedPrice = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(productPriceValue);
     productPrice[index].textContent = formattedPrice;
 });
+
+
+// js an hien thanh chinh thu tu hien thi
+let getSelect = document.querySelector('.list-product__select');
+let getOption = document.querySelector('.list-product__option');
+
+getSelect.addEventListener('click', function() {
+    if(getOption.style.display == 'block') {
+        getOption.style.display = 'none';
+    }
+    else {
+        getOption.style.display = 'block';
+    }
+});

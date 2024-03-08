@@ -42,7 +42,7 @@
             include "./templates/website/footer_website.php";
         }
 
-        public function home($categories, $product_types) {
+        public function home($categories, $product_types, $website_covers) {
             include "./templates/website/header_website.php";
             include "./templates/website/home.php";
             include "./templates/website/footer_website.php";

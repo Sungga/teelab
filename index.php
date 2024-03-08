@@ -82,6 +82,17 @@ switch($controller) {
                 break;
             }
 
+            // website cover
+            case 'add_website_cover': {
+                $CtrlAdmin->addWebsiteCover();
+                break;
+            }
+
+            case 'list_website_cover': {
+                $CtrlAdmin->listWebsiteCover();
+                break;
+            }
+
             // order
             case 'order': {
                 $CtrlAdmin->order();

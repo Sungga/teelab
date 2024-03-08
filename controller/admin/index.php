@@ -234,6 +234,67 @@ class controllerAdmin {
         
     }
 
+    // website cover
+    public function addWebsiteCover() {
+        $this->view->addWebsiteCover();
+
+        if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['website_cover']) && $_FILES['website_cover'] != '') {
+            if($this->model->addWebsiteCover()) {
+                echo "<script>alert('Đã thêm ảnh thành công!');</script>";
+                echo "<script>window.location.href = './index.php?controller=admin&page=list_website_cover'</script>";
+            }
+            else {
+                echo "<script>alert('Thêm ảnh không thành công!');</script>";
+            }
+        }
+    }
+
+    public function listWebsiteCover() {
+        $website_covers = $this->model->getWebsiteCovers();
+
+        $this->view->listWebsiteCover($website_covers);
+    }
+
+    public function deleteWebsiteCover() {
+        if(isset($_GET['website_cover_id'])) {
+            if($this->model->deleteWebsiteCover($_GET['website_cover_id'])) {
+                echo "<script>alert('Xóa thành công!')</script>";
+            }
+            else {
+                echo "<script>alert('Xóa không thành công!')</script>";
+            }
+        }
+
+        header('Location: ./index.php?controller=admin&page=list_website_cover');
+        
+    }
+
+    public function editWebsiteCover() {
+        if(isset($_GET['website_cover_id'])) {
+            $website_cover = $this->model->getWebsiteCover($_GET['website_cover_id']);
+
+            $this->view->editWebsiteCover($website_cover);
+
+            if(isset($_POST['website_cover_name'])) {
+                if($this->model->editWebsiteCover($_GET['website_cover_id'], $_POST['website_cover_name'])) {
+                    echo "<script>alert('Sửa thành công!')</script>";
+
+                    header('Location: ./index.php?controller=admin&page=list_website_cover');
+                }
+                else {
+                    echo "<script>alert('Sửa không thành công!')</script>";
+
+                    header('Location: ./index.php?controller=admin&page=list_website_cover');
+                }
+            }
+        }
+        else {
+            header('Location: ./index.php?controller=admin&page=list_website_cover');
+        }
+
+        
+    }
+
     // order
     public function order() {
         $orders = $this->model->getOrders();

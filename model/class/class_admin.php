@@ -207,7 +207,7 @@ class admin {
     }
 
     public function getProducts() {
-        $sql = "SELECT * FROM tbl_product";
+        $sql = "SELECT * FROM tbl_product ORDER BY product_id DESC";
         $result = $this->db->getRows($sql);
 
         return $result;
@@ -367,6 +367,28 @@ class admin {
 
         $sql = "DELETE FROM tbl_product_img_desc WHERE product_id = '$product_id'";
         $result = $this->db->exec($sql);
+
+        return $result;
+    }
+
+    // website cover
+    public function addWebsiteCover() {
+        $website_cover = $_FILES['website_cover']['name'];
+
+        // upload file ảnh vào trong dtb
+        move_uploaded_file($_FILES['website_cover']['tmp_name'],"model/uploads/".$_FILES['website_cover']['name']);
+
+        $sql = "INSERT INTO tbl_website_cover (`website_cover_name`) VALUES ('$website_cover')";
+
+        $result = $this->db->exec($sql);
+
+        return $result;
+    }
+
+    public function getWebsiteCovers() {
+        $sql = "SELECT * FROM tbl_website_cover";
+
+        $result = $this->db->getRows($sql);
 
         return $result;
     }

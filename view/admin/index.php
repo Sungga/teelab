@@ -54,6 +54,18 @@
             include "./templates/admin/edit_product.php";
         }
 
+        public function addWebsiteCover() {
+            include "./templates/admin/header_admin.php";
+            include "./templates/admin/admin_left.php";
+            include "./templates/admin/add_website_cover.php";
+        }
+
+        public function listWebsiteCover($website_covers) {
+            include "./templates/admin/header_admin.php";
+            include "./templates/admin/admin_left.php";
+            include "./templates/admin/list_website_cover.php";
+        }
+
         public function order($orders, $products) {
             include "./templates/admin/header_admin.php";
             include "./templates/admin/order_management.php";
