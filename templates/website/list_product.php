@@ -10,94 +10,135 @@
             </div>
             
             <div class="list-product__container">
-                <div class="list-product__left">
-                    <div class="list-product__left--item">
-                        <div class="list-product__left--item-top">
-                            <p>SIZE</p>
-                            <p>+</p>
-                            <p style="display: none;">-</p>
-                        </div>
-                        <div class="list-product__left--item-bottom list-product__size">
-                            <div class="list-product__size--item">
-                                <input type="checkbox" name="size-s" id="">
-                                <span>S</span>
+                <div class="list-product__left" style="user-select: none;">
+                    <form action="" method="POST">
+                        <!-- size -->
+                        <div class="list-product__left--item">
+                            <div class="list-product__left--item-top">
+                                <p>SIZE</p>
+                                <p>+</p>
+                                <p style="display: none;">-</p>
                             </div>
-                            <div class="list-product__size--item">
-                                <input type="checkbox" name="size-m" id="">
-                                <span>M</span>
-                            </div>
-                            <div class="list-product__size--item">
-                                <input type="checkbox" name="size-l" id="">
-                                <span>L</span>
-                            </div>
-                            <div class="list-product__size--item">
-                                <input type="checkbox" name="size-xl" id="">
-                                <span>XL</span>
-                            </div>
-                            <div class="list-product__size--item">
-                                <input type="checkbox" name="size-xxl" id="">
-                                <span>XXL</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="list-product__left--item">
-                        <div class="list-product__left--item-top">
-                            <p>Màu sắc</p>
-                            <p>+</p>
-                            <p style="display: none;">-</p>
-                        </div>
-                        <div class="list-product__left--item-bottom list-product__color">
-                            <div class="list-product__color--item">
-                                <input type="checkbox" name="color-yellow" id="">
-                                <p style="background-color: yellow;"></p>
-                            </div>
-                            <div class="list-product__color--item">
-                                <input type="checkbox" name="color-green" id="">
-                                <p style="background-color: green;"></p>
-                            </div>
-                            <div class="list-product__color--item">
-                                <input type="checkbox" name="color-pink" id="">
-                                <p style="background-color: pink;"></p>
-                            </div>
-                            <div class="list-product__color--item">
-                                <input type="checkbox" name="color-red" id="">
-                                <p style="background-color: red;"></p>
-                            </div>
-                            <div class="list-product__color--item">
-                                <input type="checkbox" name="color-gray" id="">
-                                <p style="background-color: gray;"></p>
-                            </div>
-                            <div class="list-product__color--item">
-                                <input type="checkbox" name="color-white" id="">
-                                <p style="background-color: white;"></p>
-                            </div>
-                            <div class="list-product__color--item">
-                                <input type="checkbox" name="color-brown" id="">
-                                <p style="background-color: brown;"></p>
-                            </div>
-                            <div class="list-product__color--item">
-                                <input type="checkbox" name="color-brown" id="">
-                                <p style="background-color: black;"></p>
+                            <?php
+                            // checked cac mau da duoc chon khi loc o luc truoc
+                            if(isset($_GET['f']) && $_GET['f'] == 't') {
+                                $arraySize = isset($_SESSION['filterSize']) && $_SESSION['filterSize'] > 0 ? $_SESSION['filterSize'] : array();
+                            } else {
+                                $arraySize = array();
+                            }
+                            // ham kiem tra 
+                            function isCheckedSize($size, $selectedSizes) {
+                                if(count($selectedSizes) != 0) {
+                                    if(in_array($size, $selectedSizes)) echo "checked";
+                                }
+                            }
+                            ?>
+                            <div class="list-product__left--item-bottom list-product__size">
+                                <div class="list-product__size--item">
+                                    <input type="checkbox" name="filterSize[]" value="s" id="" <?php isCheckedSize('s', $arraySize) ?>>
+                                    <span>S</span>
+                                </div>
+                                <div class="list-product__size--item">
+                                    <input type="checkbox" name="filterSize[]" value="m" id="" <?php isCheckedSize('m', $arraySize) ?>>
+                                    <span>M</span>
+                                </div>
+                                <div class="list-product__size--item">
+                                    <input type="checkbox" name="filterSize[]" value="l" id="" <?php isCheckedSize('l', $arraySize) ?>>
+                                    <span>L</span>
+                                </div>
+                                <div class="list-product__size--item">
+                                    <input type="checkbox" name="filterSize[]" value="xl" id="" <?php isCheckedSize('xl', $arraySize) ?>>
+                                    <span>XL</span>
+                                </div>
+                                <div class="list-product__size--item">
+                                    <input type="checkbox" name="filterSize[]" value="xxl" id="" <?php isCheckedSize('xxl', $arraySize) ?>>
+                                    <span>XXL</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="list-product__left--item">
-                        <div class="list-product__left--item-top">
-                            <p>Mức giá</p>
-                            <p>+</p>
-                            <p style="display: none;">-</p>
+                        <!-- color -->
+                        <div class="list-product__left--item">
+                            <div class="list-product__left--item-top">
+                                <p>Màu sắc</p>
+                                <p>+</p>
+                                <p style="display: none;">-</p>
+                            </div>
+                            <?php
+                            // checked cac mau da duoc chon khi loc o luc truoc
+                            if(isset($_GET['f']) && $_GET['f'] == 't') {
+                                $arrayColor = isset($_SESSION['filterColor']) && $_SESSION['filterColor'] > 0 ? $_SESSION['filterColor'] : array();
+                            } else {
+                                $arrayColor = array();
+                            }
+                            // ham kiem tra 
+                            function isCheckedColor($color, $selectedColors) {
+                                if(count($selectedColors) != 0) {
+                                    if(in_array($color, $selectedColors)) echo "checked";
+                                }
+                            }
+                            ?>
+                            <div class="list-product__left--item-bottom list-product__color">
+                                <div class="list-product__color--item">
+                                    <input type="checkbox" name="filterColor[]" value="yellow" id="" <?php isCheckedColor('yellow', $arrayColor)?>>
+                                    <p style="background-color: yellow;"></p>
+                                </div>
+                                <div class="list-product__color--item">
+                                    <input type="checkbox" name="filterColor[]" value="green" id="" <?php isCheckedColor('green', $arrayColor)?>>
+                                    <p style="background-color: green;"></p>
+                                </div>
+                                <div class="list-product__color--item">
+                                    <input type="checkbox" name="filterColor[]" value="pink" id="" <?php isCheckedColor('pink', $arrayColor)?>>
+                                    <p style="background-color: pink;"></p>
+                                </div>
+                                <div class="list-product__color--item">
+                                    <input type="checkbox" name="filterColor[]" value="red" id="" <?php isCheckedColor('red', $arrayColor)?>>
+                                    <p style="background-color: red;"></p>
+                                </div>
+                                <div class="list-product__color--item">
+                                    <input type="checkbox" name="filterColor[]" value="gray" id="" <?php isCheckedColor('gray', $arrayColor)?>>
+                                    <p style="background-color: gray;"></p>
+                                </div>
+                                <div class="list-product__color--item">
+                                    <input type="checkbox" name="filterColor[]" value="white" id="" <?php isCheckedColor('white', $arrayColor)?>>
+                                    <p style="background-color: white;"></p>
+                                </div>
+                                <div class="list-product__color--item">
+                                    <input type="checkbox" name="filterColor[]" value="brown" id="" <?php isCheckedColor('brown', $arrayColor)?>>
+                                    <p style="background-color: brown;"></p>
+                                </div>
+                                <div class="list-product__color--item">
+                                    <input type="checkbox" name="filterColor[]" value="brown" id="" <?php isCheckedColor('brown', $arrayColor)?>>
+                                    <p style="background-color: black;"></p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="list-product__left--item-bottom list-product__range">
-                            <!-- <input type="range" name="" id=""> -->
-                            <p id="rangeValue" style="width: 100%; text-align: center;">0</p>
-                            <input type="range" id="myRange" min="0" max="10000000" step="1" value="0" style="width: 100%;">
+                        <!-- range -->
+                        <div class="list-product__left--item">
+                            <div class="list-product__left--item-top">
+                                <p>Mức giá</p>
+                                <p>+</p>
+                                <p style="display: none;">-</p>
+                            </div>
+                            <div class="list-product__left--item-bottom list-product__range">
+                                <!-- <input type="range" name="" id=""> -->
+                                <?php
+                                if(isset($_GET['f']) && $_GET['f'] == 't') {
+                                    $valueRange = isset($_SESSION['filterRange']) ? intval($_SESSION['filterRange']) : 0;
+                                } else {
+                                    $valueRange = 0;
+                                }
+                                // chuyen thanh dang tien vnd
+                                $valueRangeVND = number_format($valueRange, 0, ',', '.');
+                                ?>
+                                <p id="rangeValue" style="width: 100%; text-align: center;"><?php echo $valueRangeVND ?>₫</p>
+                                <input type="range" id="myRange" min="0" max="10000000" step="1" value="<?php echo $valueRange ?>" style="width: 100%;" name="filterRange">
+                            </div>
                         </div>
-                    </div>
-                    <div class="list-product__left--filter">
-                        <input type="submit" value="Lọc">
-                    </div>
+                        <!-- filter -->
+                        <div class="list-product__left--filter">
+                            <input type="submit" value="Lọc" name="filter">
+                        </div>
+                    </form>
                 </div>
                 <div class="list-product__right">
                     <div class="list-product__right--top">
@@ -126,6 +167,11 @@
                                             case 'HighToLow':{
                                                 $arrange = 'HighToLow';
                                                 echo "<p>Giá cao đến thấp</p>";
+                                                break;
+                                            }
+                                            default:{
+                                                $arrange = 'Latest';
+                                                echo "<p>Mới nhất</p>";
                                                 break;
                                             }
                                         }
@@ -258,14 +304,33 @@
                             <?php
                             if($_GET['page'] == 'product_type') {
                                 for($i = 1; $i <= $numberOfPage; $i++) {
+                                    $product_type_id = isset($_GET['product_type_id']) ? $_GET['product_type_id'] : 0;
+                                    $product_type_name = isset($_GET['product_type_name']) ? $_GET['product_type_name'] : 0;
+                                    $arrange = isset($_GET['arrange']) ? $_GET['arrange'] : '';
+                                    $p = $i;
+                                    $f = isset($_GET['f']) ? $_GET['f'] : 'f';
                                     if($_GET['p'] == $i) {
+                                        if(isset($_GET['product_type_id'])) {
+                                            echo "<a href='./index.php?controller=website&page=product_type&product_type_id=$product_type_id&p=$p&f=$f&arrange=$arrange' class='focus'>$i</a>";
+
+                                        }
+                                        elseif(isset($_GET['product_type_name'])) {
+                                            echo "<a href='./index.php?controller=website&page=product_type_search&product_type_name=$product_type_name&p=$p&f=$f&arrange=$arrange' class='focus'>$i</a>";
+                                        }
                             ?>
-                                        <a href="./index.php?controller=website&page=product_type&product_type_id=<?php echo $product_type['product_type_id'] ?>&p=<?php echo $i ?>" class="focus"><?php echo $i ?></a>
+                                        <!-- <a href="./index.php?controller=website&page=product_type&product_type_id=<?php echo $product_type['product_type_id'] ?>&p=<?php echo $i ?>" class="focus"><?php echo $i ?></a> -->
                             <?php
                                     }
                                     else {
+                                        if(isset($_GET['product_type_id'])) {
+                                            echo "<a href='./index.php?controller=website&page=product_type&product_type_id=$product_type_id&p=$p&f=$f&arrange=$arrange' class='focus'>$i</a>";
+
+                                        }
+                                        elseif(isset($_GET['product_type_name'])) {
+                                            echo "<a href='./index.php?controller=website&page=product_type_search&product_type_name=$product_type_name&p=$p&f=$f&arrange=$arrange' class='focus'>$i</a>";
+                                        }
                             ?>
-                                        <a href="./index.php?controller=website&page=product_type&product_type_id=<?php echo $product_type['product_type_id'] ?>&p=<?php echo $i ?>"><?php echo $i ?></a>
+                                        <!-- <a href="./index.php?controller=website&page=product_type&product_type_id=<?php echo $product_type['product_type_id'] ?>&p=<?php echo $i ?>"><?php echo $i ?></a> -->
                             <?php
                                 }
                                 }
@@ -296,11 +361,3 @@
     </section>
 
     <script src="./templates/access/js/js_list_product.js"></script>
-
-    <script>
-
-    </script>
-
-    <style>
-
-    </style>

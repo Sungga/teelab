@@ -34,7 +34,7 @@
                                 <?php
                                     while($i < 4 && $j < count($arr)) {
                                 ?>
-                                        <a href="./index.php?controller=website&page=product_type&product_type_id=<?php echo $arr[$j]['product_type_id'] ?>&p=1"><?php echo $arr[$j]['product_type_name'] ?></a>
+                                        <a href="./index.php?controller=website&page=product_type&product_type_id=<?php echo $arr[$j]['product_type_id'] ?>&p=1&f=f"><?php echo $arr[$j]['product_type_name'] ?></a>
                                 <?php
                                         $j++;
                                         $i++;

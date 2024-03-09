@@ -13,15 +13,26 @@ class controllerWebsite {
     }
 
     public function productType() {
-        if(isset($_GET['product_type_id'])) {
+        if((isset($_GET['product_type_id']) && $_GET['product_type_id'] != '') && (isset($_GET['p']) && $_GET['p'] != '') && (isset($_GET['f']) && $_GET['f'] != '')) {
             $categories = $this->model->getCategories();
             $product_types = $this->model->getProductTypes();
 
             $product_type = $this->model->getProductType($_GET['product_type_id']);
             $category = $this->model->getCategory($product_type['category_id']);
             $colors = $this->model->getColors();
-            if(isset($_GET['arrange'])) {
+
+            // loc san pham in ra
+            if($_GET['f'] == 't') {
+                $filterSize = isset($_SESSION['filterSize']) && $_SESSION['filterSize'] != '' ? $_SESSION['filterSize'] : array();
+                $filterColor = isset($_SESSION['filterColor']) && $_SESSION['filterColor'] != '' ? $_SESSION['filterColor'] : array();
+                $filterRange = isset($_SESSION['filterRange']) && $_SESSION['filterRange'] != '' ? $_SESSION['filterRange'] : '';
+                $arr = $this->model->getProducts_w_productTypeId_filter($_GET['product_type_id'], $filterSize, $filterColor, $filterRange);
+            }
+            else {
                 $arr = $this->model->getProducts_w_productTypeId($_GET['product_type_id']);
+            }
+            
+            if(isset($_GET['arrange'])) {
                 $products = $this->changeSortMethod($_GET['arrange'], $arr);
             }
             else {
@@ -32,6 +43,7 @@ class controllerWebsite {
             $this->searchProduct();
 
             if ($_SERVER["REQUEST_METHOD"] == 'POST') {
+                // them san pham vao gio hang
                 if(isset($_POST["size"])) {
                     if(isset($_SESSION['user_id'])) {
                         $cart_user_id = $_SESSION['user_id'];
@@ -52,6 +64,22 @@ class controllerWebsite {
                     }
                 }
 
+                // loc san pham hien thi
+                if(isset($_POST['filter'])) {
+                    $_SESSION['filterSize'] = isset($_POST['filterSize']) ? $_POST['filterSize'] : '';
+                    $_SESSION['filterColor'] = isset($_POST['filterColor']) ? $_POST['filterColor'] : '';
+                    $_SESSION['filterRange'] = isset($_POST['filterRange']) ? $_POST['filterRange'] : '';
+
+                    $product_type_id = isset($_GET['product_type_id']) ? $_GET['product_type_id'] : 0;
+                    $product_type_name = isset($_GET['product_type_name']) ? $_GET['product_type_name'] : 0;
+                    $arrange = isset($_GET['arrange']) ? $_GET['arrange'] : '';
+                    $p = isset($_GET['p']) ? $_GET['p'] : 1;
+                    $f = 't';
+                    
+                    echo "<script>window.location.href = './index.php?controller=website&page=product_type&product_type_id=$product_type_id&p=$p&f=$f&arrange=$arrange';</script>";
+                }
+
+                // doi cach sap xep san pham
                 $this->selectSortMethod();
             }
         }
@@ -61,7 +89,7 @@ class controllerWebsite {
     }
 
     public function productTypeSearch() {
-        if(isset($_GET['product_type_name'])) {
+        if((isset($_GET['product_type_name']) && $_GET['product_type_name'] != '') && (isset($_GET['p']) && $_GET['p'] != '') && (isset($_GET['f']) && $_GET['f'] != '')) {
             $categories = $this->model->getCategories();
             $product_types = $this->model->getProductTypes();
 
@@ -102,6 +130,20 @@ class controllerWebsite {
                     }
                 }
 
+                if(isset($_POST['filter'])) {
+                    $_SESSION['filterSize'] = isset($_POST['filterSize']) ? $_POST['filterSize'] : '';
+                    $_SESSION['filterColor'] = isset($_POST['filterColor']) ? $_POST['filterColor'] : '';
+                    $_SESSION['filterRange'] = isset($_POST['filterRange']) ? $_POST['filterRange'] : '';
+
+                    $product_type_id = isset($_GET['product_type_id']) ? $_GET['product_type_id'] : 0;
+                    $product_type_name = isset($_GET['product_type_name']) ? $_GET['product_type_name'] : 0;
+                    $arrange = isset($_GET['arrange']) ? $_GET['arrange'] : '';
+                    $p = isset($_GET['p']) ? $_GET['p'] : 1;
+                    $f = 't';
+
+                    echo "<script>window.location.href = './index.php?controller=website&page=product_type_search&product_type_name=$product_type_name&p=$p&f=$f&arrange=$arrange';</script>";
+                }
+
                 $this->selectSortMethod();
             }
         }
@@ -133,13 +175,14 @@ class controllerWebsite {
 
             $product_type_id = isset($_GET['product_type_id']) ? $_GET['product_type_id'] : 0;
             $product_type_name = isset($_GET['product_type_name']) ? $_GET['product_type_name'] : 0;
-            $p = isset($_GET['p']) ? $_GET['p'] : 0;
+            $p = isset($_GET['p']) ? $_GET['p'] : 1;
+            $f = isset($_GET['f']) ? $_GET['f'] : 'f';
             
             if(isset($_GET['product_type_id'])) {
-                echo "<script>window.location.href = './index.php?controller=website&page=product_type&product_type_id=$product_type_id&p=$p&arrange=$arrange';</script>";
+                echo "<script>window.location.href = './index.php?controller=website&page=product_type&product_type_id=$product_type_id&p=$p&f=$f&arrange=$arrange';</script>";
             }
             elseif(isset($_GET['product_type_name'])) {
-                echo "<script>window.location.href = './index.php?controller=website&page=product_type_search&product_type_name=$product_type_name&p=$p&arrange=$arrange';</script>";
+                echo "<script>window.location.href = './index.php?controller=website&page=product_type_search&product_type_name=$product_type_name&p=$p&f=$f&arrange=$arrange';</script>";
             }
             // echo "<script>alert('".$_POST['arrange']."');</script>";
         }
@@ -149,7 +192,7 @@ class controllerWebsite {
     public function changeSortMethod($method, $products) {
         switch ($method) {
             case 'Latest':
-                return $products;
+                break;
             case 'Oldest':
                 return array_reverse($products);
             case 'LowToHigh':
@@ -160,7 +203,7 @@ class controllerWebsite {
                 // Sắp xếp mảng sử dụng hàm so sánh giá mới (từ thấp đến cao)
                 usort($products, 'compareByNewPriceLowToHigh');
 
-                return $products;
+                break;
             case 'HighToLow':
                 // Hàm so sánh dựa trên giá mới
                 function compareByNewPrice($a, $b) {
@@ -170,10 +213,13 @@ class controllerWebsite {
                 // Sắp xếp mảng sử dụng hàm so sánh giá mới
                 usort($products, 'compareByNewPrice');
 
-                return $products;
+                break;
             default:
-                return $products;
+                break;
         }
+
+        // $products = $this->filterProduct($products);
+        return $products;
     }
 
     public function product() {
@@ -217,7 +263,12 @@ class controllerWebsite {
                     $cart_color = $_POST["color"];
                     $cart_number = $_POST['numberInput'];
 
-                    echo "<script>window.location.href = './index.php?controller=website&page=cart&product_id=$cart_product_id&size=$cart_size&color=$cart_color&numberInput=$cart_number'</script>";
+                    if(isset($_SESSION['user_id'])) {
+                        echo "<script>window.location.href = './index.php?controller=website&page=cart&product_id=$cart_product_id&size=$cart_size&color=$cart_color&numberInput=$cart_number'</script>";
+                    }
+                    else {
+                        echo "<script>window.location.href = './index.php?controller=website&page=cart&product_id=$cart_product_id&size=$cart_size&color=$cart_color&numberInput=$cart_number'</script>";
+                    }
                 }
                 else {
                     echo "<script>alert('hehe');</script>";
@@ -238,10 +289,25 @@ class controllerWebsite {
         if(isset($_SESSION['user_id'])) {
             $list_cart = $this->model->getCarts($_SESSION['user_id']);
 
+            // hien thi them don hang nguoi dung vua an mua neu co
+            if(isset($_GET['product_id']) && isset($_GET['size']) && isset($_GET['color']) && isset($_GET['numberInput'])) {
+                $list_cart_order = array(
+                    'cart_id' => "k".$_SESSION['user_id'],
+                    'cart_product_id' => $_GET['product_id'],
+                    'cart_size' => $_GET['size'],
+                    'cart_color' => $_GET['color'],
+                    'cart_quantity' => $_GET['numberInput']
+                );
+                $list_cart[] = $list_cart_order;
+            }
+
             $arr_product_cart = array();
             foreach($list_cart as $list_cart_item) {
                 $arr_product_cart[] = $this->model->getProduct($list_cart_item['cart_product_id']);
             }
+
+            // dao nguoc mang gio hang
+            $arr_product_cart = array_reverse($arr_product_cart);
 
             $colors = $this->model->getColors();
 
@@ -484,7 +550,7 @@ class controllerWebsite {
             if(isset($_POST['search'])) {
                 // $this->model->searchProduct($_POST['search']);
                 $product_type_name = $_POST['search'];
-                echo "<script>window.location.href = './index.php?controller=website&page=product_type_search&product_type_name=$product_type_name&p=1';</script>";
+                echo "<script>window.location.href = './index.php?controller=website&page=product_type_search&product_type_name=$product_type_name&p=1&f=f';</script>";
             }
         }
     }

@@ -57,6 +57,42 @@ class website {
         return $result;
     }
 
+    public function getProducts_w_productTypeId_filter($product_type_id, $filterSize, $filterColor, $filterRange) {
+        $sql = "SELECT DISTINCT tbl_product.* FROM tbl_product, tbl_product_color WHERE tbl_product.product_id = tbl_product_color.product_id and tbl_product.product_type_id = '$product_type_id'";
+        // chua phat trien phan size san pham
+        // if(count($filterSize) > 0) {
+        //     foreach($filterSize as $index => $item) {
+        //         if($index == 0) {
+
+        //         }
+        //     }
+        // }
+
+        // loc phan color
+        if(count($filterColor) > 0) {
+            foreach($filterColor as $index => $item) {
+                if($index == 0) {
+                    $sql .= " and (tbl_product_color.product_color = '$item'";
+                }
+                else {
+                    $sql .= "or tbl_product_color.product_color = '$item'";
+                }
+            }
+            $sql .= ")";
+        }
+        
+        // phan gia tien
+        if($filterRange != '' && $filterRange != 0) {
+            $filterRange = intval($filterRange);
+            $sql .= " and tbl_product.product_price_new <= $filterRange";
+        }
+
+        $sql .= ' ORDER BY product_id DESC';
+        $result = $this->db->getRows($sql);
+
+        return $result;
+    }
+
     public function getColors() {
         $sql = "SELECT * FROM tbl_product_color";
         $result = $this->db->getRows($sql);

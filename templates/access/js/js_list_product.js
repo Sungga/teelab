@@ -23,8 +23,17 @@ itemTops.forEach(function(itemTop, index) {
 let range = document.getElementById('myRange');
 let rangeValue = document.getElementById('rangeValue');
 
-range.addEventListener('input', function() {
+// ham cap nhat gia tri cho rangeValue
+function updateRangeValue() {
     rangeValue.textContent = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(range.value);
+}
+
+// goi ham cap nhat gia tri
+updateRangeValue();
+
+// lang nghe su kien thay doi range
+range.addEventListener('input', function() {
+    updateRangeValue();
 });
 
 

@@ -46,15 +46,37 @@
 ?>
 
 <?php
-    // if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
-    //     echo "Kết nối an toàn (HTTPS).";
-    // } else {
-    //     echo $_SERVER['HTTP'];
-    // }
-
+    session_start();
     echo "Địa chỉ URL hiện tại: " . $_SERVER['REQUEST_URI'];
+    echo "<pre>";
+    print_r($_SESSION['filterSize']);
+    echo "<pre>";
+    print_r($_SESSION['filterColor']);
+    echo "<pre>";
+    print_r($_SESSION['filterRange']);
+
+    if($_SERVER['REQUEST_METHOD'] == 'POST') {
+        echo "<pre>";
+        print_r($_POST['a']);
+    }
+
+    $a = 'a';
+    $a .= ' b';
+    echo $a;
 ?>
-<form action="" method="GET">
-    <input type="text">
+
+<?php
+// $a = 5678945;
+
+// // Chuyển đổi số thành định dạng tiền tệ VND
+// $a_formatted = number_format($a, 0, ',', '.');
+
+// // Hiển thị kết quả
+// echo $a_formatted . ' VND';
+?>
+<form action="" method="POST">
+    <!-- <input type="text" name="b"> -->
+    <input type="checkbox" name="a[]" id="" value="c">
+    <input type="checkbox" name="a[]" id="" value="b">
     <input type="submit" value="ấn">
 </form>
