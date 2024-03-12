@@ -238,7 +238,7 @@ class controllerAdmin {
     public function addWebsiteCover() {
         $this->view->addWebsiteCover();
 
-        if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['website_cover']) && $_FILES['website_cover'] != '') {
+        if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['website_cover_name']) && $_FILES['website_cover_name'] != '') {
             if($this->model->addWebsiteCover()) {
                 echo "<script>alert('Đã thêm ảnh thành công!');</script>";
                 echo "<script>window.location.href = './index.php?controller=admin&page=list_website_cover'</script>";
@@ -275,7 +275,7 @@ class controllerAdmin {
 
             $this->view->editWebsiteCover($website_cover);
 
-            if(isset($_POST['website_cover_name'])) {
+            if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['website_cover_name']) && $_FILES['website_cover_name'] != '') {
                 if($this->model->editWebsiteCover($_GET['website_cover_id'], $_POST['website_cover_name'])) {
                     echo "<script>alert('Sửa thành công!')</script>";
 
@@ -331,14 +331,17 @@ class controllerAdmin {
     public function success() {
         if(isset($_GET['order_id'], $_GET['product_quantity'], $_GET['product_id'])) {
             $this->model->success($_GET['order_id']);
+            // Giam so luong san pham
             $this->model->reduceQuantity($_GET['product_id'], $_GET['product_quantity']);
+            // Đưa sản phẩm vào trong danh sách doanh thu
+            echo "<script>alert('aa')</script>";
+            $this->model->addRevenue($_GET['order_id']);
         }
         else {
             echo "<script>alert('Có lỗi xảy ra!');</script>";
         }
 
         header('location: ./index.php?controller=admin&page=order');
-
     }
 
     public function cancel() {
@@ -367,6 +370,30 @@ class controllerAdmin {
         header('location: ./index.php?controller=admin&page=order');
 
         
+    }
+
+    // Revenue
+    public function revenue() {
+        $revenues = $this->model->getRevenues();
+
+        $this->view->revenue($revenues);
+    }
+    
+    public function completedOrder() {
+        if(isset($_GET['date'])) {
+            $completedOrders = $this->model->getCompletedOrder_w_date($_GET['date']);
+
+            $products = array();
+            foreach($completedOrders as $completedOrder_item) {
+                $product = $this->model->getProduct($completedOrder_item['product_id']);
+                $products[] = $product;
+            }
+    
+            $this->view->completedOrder($completedOrders, $products);
+        }
+        else {
+            header('Location: ./index.php?controller=admin&page=revenue');
+        }
     }
 }
 

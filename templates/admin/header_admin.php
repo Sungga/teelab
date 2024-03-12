@@ -16,6 +16,7 @@
             <div class="admin__top--container">
                 <div><a href="./index.php?controller=admin&page=add_category">Quản lý sản phẩm</a></div>
                 <div><a href="./index.php?controller=admin&page=order">Quản lý đơn hàng</a></div>
+                <div><a href="./index.php?controller=admin&page=revenue">Danh thu</a></div>
                 <div><a href="./index.php">Quay lại trang chủ</a></div>
             </div>
         </div>

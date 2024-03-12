@@ -373,10 +373,10 @@ class admin {
 
     // website cover
     public function addWebsiteCover() {
-        $website_cover = $_FILES['website_cover']['name'];
+        $website_cover = $_FILES['website_cover_name']['name'];
 
         // upload file ảnh vào trong dtb
-        move_uploaded_file($_FILES['website_cover']['tmp_name'],"model/uploads/".$_FILES['website_cover']['name']);
+        move_uploaded_file($_FILES['website_cover_name']['tmp_name'],"model/uploads/".$_FILES['website_cover_name']['name']);
 
         $sql = "INSERT INTO tbl_website_cover (`website_cover_name`) VALUES ('$website_cover')";
 
@@ -390,6 +390,42 @@ class admin {
 
         $result = $this->db->getRows($sql);
 
+        // dao nguoc mang
+        $result = array_reverse($result);
+
+        return $result;
+    }
+
+    public function getWebsiteCover($website_cover_id) {
+        $sql = "SELECT * FROM tbl_website_cover WHERE website_cover_id = '$website_cover_id'";
+
+        $result = $this->db->getRows($sql);
+
+        // dao nguoc mang
+        $result = array_reverse($result);
+
+        return $result;
+    }
+
+    public function editWebsiteCover($website_cover_id) {
+        $website_cover_name = $_FILES['website_cover_name']['name'];
+
+        // upload file ảnh vào trong dtb
+        move_uploaded_file($_FILES['website_cover_name']['tmp_name'],"model/uploads/".$_FILES['website_cover_name']['name']);
+
+        $sql = "UPDATE tbl_website_cover 
+                SET website_cover_name = '$website_cover_name' 
+                WHERE website_cover_id = '$website_cover_id'";
+                
+        $result = $this->db->exec($sql);
+
+        return $result;
+    }
+
+    public function deleteWebsiteCover($website_cover_id) {
+        $sql = "DELETE FROM tbl_website_cover WHERE website_cover_id = '$website_cover_id'";
+        $result = $this->db->exec($sql);
+
         return $result;
     }
 
@@ -398,6 +434,14 @@ class admin {
         $sql = "SELECT * FROM tbl_order";
 
         $result = $this->db->getRows($sql);
+
+        return $result;
+    }
+
+    public function getOrder($order_id) {
+        $sql = "SELECT * FROM tbl_order WHERE order_id = $order_id";
+
+        $result = $this->db->getRow($sql);
 
         return $result;
     }
@@ -464,6 +508,88 @@ class admin {
                 WHERE product_id='$product_id'";
 
         $result = $this->db->exec($sql);
+
+        return $result;
+    }
+
+    public function addRevenue($order_id) {
+        $order = $this->getOrder($order_id);
+
+        $order_id = $order['order_id'];
+        $product_id = $order['product_id'];
+        $user_id = $order['user_id'];
+        $order_color = $order['order_color'];
+        $order_size = $order['order_size'];
+        $order_quantity = $order['order_quantity'];
+        $order_total = $order['order_total'];
+        $order_customer = $order['order_customer'];
+        $order_phone = $order['order_phone'];
+        $order_address = $order['order_address'];
+        $order_date = $order['order_date'];
+        $order_completed = date('Y-m-d', strtotime('today'));
+
+        // them don hang da giao thanh cong vao trong lich su cua ngay day
+        $sql = "INSERT INTO 
+                tbl_completed_orders (order_id,
+                                    product_id,
+                                    user_id,
+                                    order_color, 
+                                    order_size, 
+                                    order_quantity, 
+                                    order_total, 
+                                    order_customer, 
+                                    order_phone, 
+                                    order_address, 
+                                    order_date, 
+                                    order_completed)
+                VALUES ('$order_id',
+                        '$product_id',
+                        '$user_id',
+                        '$order_color',
+                        '$order_size',
+                        '$order_quantity',
+                        '$order_total',
+                        '$order_customer',
+                        '$order_phone',
+                        '$order_address',
+                        '$order_date',
+                        '$order_completed')";
+
+        $result = $this->db->exec($sql);
+
+        $revenue = $this->getRevenue($order_completed);
+        // Tang them tong doanh thu cua ngay day
+        // neu chua co hang doanh thu cua ngay hom nay thi them hang
+        if(empty($revenue)) {
+            $sql = "INSERT INTO tbl_revenue (revenue_date, revenue) VALUES ('$order_completed', '$order_total')";
+            $result = $this->db->exec($sql);
+            echo "<script>alert('1')</script>";
+        }
+        // neu co hang du lieu doanh thu ngay hom nay roi thi ta cap nhat doanh thu
+        else {
+            $sql = "UPDATE tbl_revenue 
+                    SET revenue = revenue + $order_total
+                    WHERE revenue_date = '$order_completed'";
+
+            $result = $this->db->exec($sql);
+            echo "<script>alert('2')</script>";
+        }
+
+        return $result;
+    }
+
+    public function getRevenues() {
+        $sql = "SELECT * FROM tbl_revenue";
+
+        $result = $this->db->getRows($sql);
+
+        return $result;
+    }
+
+    public function getCompletedOrder_w_date($date) {
+        $sql = "SELECT * FROM tbl_completed_orders WHERE order_completed = '$date'";
+
+        $result = $this->db->getRows($sql);
 
         return $result;
     }

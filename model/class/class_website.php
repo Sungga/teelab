@@ -156,6 +156,7 @@ class website {
         $name_user = $_SESSION['buy_user_info']['buy_name_user'];
         $phone_user = $_SESSION['buy_user_info']['buy_phone_user'];
         $address = $_SESSION['buy_user_info']['buy_address'];
+        $order_date = date('Y-m-d', strtotime('today'));
 
         $sql = "INSERT INTO tbl_order
                 (product_id,
@@ -166,7 +167,8 @@ class website {
                 order_total,
                 order_customer,
                 order_phone,
-                order_address)
+                order_address,
+                order_date)
                 VALUES 
                 ('$product_id',
                 '$user_id',
@@ -176,7 +178,8 @@ class website {
                 '$total',
                 '$name_user',
                 '$phone_user',
-                '$address')";
+                '$address',
+                '$order_date')";
 
         $result = $this->db->exec($sql);
 
@@ -232,6 +235,8 @@ class website {
         $sql = "SELECT * FROM tbl_website_cover";
 
         $result = $this->db->getRows($sql);
+
+        $result = array_reverse($result);
 
         return $result;
     }

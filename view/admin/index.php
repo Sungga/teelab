@@ -66,9 +66,25 @@
             include "./templates/admin/list_website_cover.php";
         }
 
+        public function editWebsiteCover($website_cover) {
+            include "./templates/admin/header_admin.php";
+            include "./templates/admin/admin_left.php";
+            include "./templates/admin/edit_website_cover.php";
+        }
+
         public function order($orders, $products) {
             include "./templates/admin/header_admin.php";
             include "./templates/admin/order_management.php";
+        }
+
+        public function revenue($revenues) {
+            include "./templates/admin/header_admin.php";
+            include "./templates/admin/revenue.php";
+        }
+
+        public function completedOrder($completedOrders, $products) {
+            include "./templates/admin/header_admin.php";
+            include "./templates/admin/completedOrder.php";
         }
     }
 

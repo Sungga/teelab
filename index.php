@@ -93,6 +93,16 @@ switch($controller) {
                 break;
             }
 
+            case 'edit_website_cover': {
+                $CtrlAdmin->editWebsiteCover();
+                break;
+            }
+
+            case 'delete_website_cover': {
+                $CtrlAdmin->deleteWebsiteCover();
+                break;
+            }
+
             // order
             case 'order': {
                 $CtrlAdmin->order();
@@ -126,6 +136,16 @@ switch($controller) {
 
             case 'tick': {
                 $CtrlAdmin->tick();
+                break;
+            }
+
+            case 'revenue': {
+                $CtrlAdmin->revenue();
+                break;
+            }
+
+            case 'completedOrder': {
+                $CtrlAdmin->completedOrder();
                 break;
             }
 

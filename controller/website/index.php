@@ -281,6 +281,23 @@ class controllerWebsite {
 
     }
 
+    // ham nay duoc goi khi nguoi dung an mua san pham luon ma khong them vao gio hang
+    // public function buyProduct() {
+    //     if(isset($_GET['product_id']) && isset($_GET['size']) && isset($_GET['color']) && isset($_GET['numberInput'])) {
+    //         $list_cart_order = array(
+    //             'cart_id' => "k".$_SESSION['user_id'],
+    //             'cart_product_id' => $_GET['product_id'],
+    //             'cart_size' => $_GET['size'],
+    //             'cart_color' => $_GET['color'],
+    //             'cart_quantity' => $_GET['numberInput']
+    //         );
+    //         $list_cart[] = $list_cart_order;
+    //     }
+    //     else {
+    //         echo '<script>window.location.href = "./index.php"</script>';
+    //     }
+    // }
+
     public function cart() {
         $categories = $this->model->getCategories();
         $product_types = $this->model->getProductTypes();
@@ -289,7 +306,10 @@ class controllerWebsite {
         if(isset($_SESSION['user_id'])) {
             $list_cart = $this->model->getCarts($_SESSION['user_id']);
 
-            // hien thi them don hang nguoi dung vua an mua neu co
+            // Tao mot bien de luu tru xac nhan rang trong gio hang co san pham tam thoi
+            // $ProductsOutsideTheCart = 'false';
+
+            // // hien thi them don hang nguoi dung vua an mua neu co
             if(isset($_GET['product_id']) && isset($_GET['size']) && isset($_GET['color']) && isset($_GET['numberInput'])) {
                 $list_cart_order = array(
                     'cart_id' => "k".$_SESSION['user_id'],
@@ -298,7 +318,10 @@ class controllerWebsite {
                     'cart_color' => $_GET['color'],
                     'cart_quantity' => $_GET['numberInput']
                 );
+                // Thêm sản phẩm đấy vào giỏ hàng tạm thời
                 $list_cart[] = $list_cart_order;
+
+                // $ProductsOutsideTheCart = 'true';
             }
 
             $arr_product_cart = array();
@@ -307,7 +330,7 @@ class controllerWebsite {
             }
 
             // dao nguoc mang gio hang
-            $arr_product_cart = array_reverse($arr_product_cart);
+            // $arr_product_cart = array_reverse($arr_product_cart);
 
             $colors = $this->model->getColors();
 
@@ -348,8 +371,12 @@ class controllerWebsite {
                 // truong hop nguoi mua co tai khoan
                 if(isset($_SESSION['user_id'])) {
                     $listBuy = array();
+
                     foreach($list_cart as $list_cart_item) {
                         if(isset($_POST['check'.$list_cart_item['cart_id']])) {
+                            // Kiem tra xem co mua san pham tam thoi trong gio hang hay khong
+                            // if($ProductsOutsideTheCart = 'true' && )
+
                             // Loại bỏ các ký tự không phải số và chuyển đổi thành số nguyên
                             $total = (int) preg_replace('/[^0-9]/', '', $_POST['total'.$list_cart_item['cart_id']]);
 
@@ -362,6 +389,7 @@ class controllerWebsite {
                             $arr['total'] = $total;
 
                             $listBuy[] = $arr;
+                            
                         }
                     }
                     $_SESSION['listBuy'] = $listBuy;
@@ -461,6 +489,8 @@ class controllerWebsite {
         if(isset($_SESSION['listBuy']) && isset($_SESSION['buy_user_info']) && isset($_SESSION['payment_method'])) {
             $status = 'Đặt hàng không thành công';
             foreach($_SESSION['listBuy'] as $listBuy_index => $listBuy) {
+                // Neu nhu khong phai thanh toan bang tien mat (cash on delivery) thi tong tien se duoc chuyen ve 0
+                // Sau phat trien them thanh toan onl thi nen bo chuc nang nay va them mot cot xac nhan da thanh toan thi hay hon vi no anh huong den bang thong ke doanh thu
                 if($_SESSION['payment_method'] != 'cod') {
                     $_SESSION['listBuy'][$listBuy_index]['total'] = 0;
                 }
