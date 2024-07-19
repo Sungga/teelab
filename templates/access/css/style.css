@@ -1,3 +1,4 @@
+/*  */
 /* ---------------------------------------------------------<< BEGIN HEADER >>----------------------------------------------------- */
 #header {
     background-color: var(--header-color);
@@ -513,7 +514,7 @@
     display: none;
     position: absolute;
     left: 0;
-    top: 40px;
+    top: 41px;
     width: 100%;
     background-color: #fff;
     z-index: 100;
@@ -554,8 +555,22 @@
     cursor: pointer;
     padding: 8px 8px 0;
     border: 1px solid #ccc;
+    transition: all 0.3s ease-in-out;
     
     position: relative;
+}
+
+.list-product__product:hover {
+    border: 1px solid #000;
+}
+
+.list-product__product:hover .list-product__product--img img {
+    transform: scale(1.05);
+}
+
+.list-product__product--img {
+    height: 360px;
+    overflow: hidden;
 }
 
 .list-product__product--img img {
@@ -564,6 +579,8 @@
     height: 360px; /* Cố định chiều cao của ảnh là 360px */
     width: auto; /* Chiều rộng tự động điều chỉnh để giữ tỷ lệ khung hình */
     max-width: 100%; /* Ảnh sẽ không vượt quá kích thước của phần tử chứa nó */
+
+    transition: all 0.3s ease-in-out;
 }
 
 .list-product__product--name {
@@ -775,11 +792,28 @@
 
     transition: transform 0.3s ease;
     transform-origin: 50% 50%;
-    cursor: zoom-in;
+    cursor: none;
+    /* cursor: zoom-in; */
 }
 
-.product__img--big:hover img {
+/* .product__img--big:hover img {
     transform: scale(1.2);
+} */
+
+#result__zoom--img {
+    z-index: 99;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    position: fixed;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+}
+
+.hide {
+    display: none;
 }
 
 .product__img--small {
@@ -970,8 +1004,8 @@ input[name="color"]:checked + label {
 }
 
 .product__quantity span {
-    height: 36px;
-    line-height: 36px;
+    height: 37px;
+    line-height: 37px;
     border: 1px solid var(--color-medium);
     width: 40px;
 }
@@ -979,6 +1013,7 @@ input[name="color"]:checked + label {
 .product__quantity .increment {
     position: absolute;
     right: 0;
+    top: 0;
     width: 42px;
     border-radius: 0 0 16px 0;
     text-align: center;
@@ -989,6 +1024,7 @@ input[name="color"]:checked + label {
 .product__quantity .decrement {
     position: absolute;
     left: 0;
+    top: 0;
     width: 42px;
     border-radius: 16px 0 0;
     text-align: center;

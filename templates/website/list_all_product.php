@@ -4,9 +4,7 @@
             <div class="path">
                 <a href="./index.php">Trang chủ</a>
                 <span>&#8594;</span>
-                <a href="#"><?php echo $category['category_name'] ?></a>
-                <span>&#8594;</span>
-                <a href="#"><?php echo $product_type['product_type_name'] ?></a>
+                <a href="#">Tất cả sản phẩm</a>
             </div>
             
             <div class="list-product__container">
@@ -300,33 +298,18 @@
                     
                     <div class="list-product__right--bottom">
                         <form action="" method="get">
-                            <!-- <input type="submit" value="&#60;"> -->
                             <?php
-                            if(true) {
-                                for($i = 1; $i <= $numberOfPage; $i++) {
-                                    $product_type_id = isset($_GET['product_type_id']) ? $_GET['product_type_id'] : 0;
-                                    $product_type_name = isset($_GET['product_type_name']) ? $_GET['product_type_name'] : 0;
-                                    $arrange = isset($_GET['arrange']) ? $_GET['arrange'] : '';
-                                    $p = $i;
-                                    $f = isset($_GET['f']) ? $_GET['f'] : 'f';
-                                    if($_GET['p'] == $i) {
-                                        if(isset($_GET['product_type_id'])) {
-                                            echo "<a href='./index.php?controller=website&page=product_type&product_type_id=$product_type_id&p=$p&f=$f&arrange=$arrange' class='focus'>$i</a>";
-
-                                        }
-                                        elseif(isset($_GET['product_type_name'])) {
-                                            echo "<a href='./index.php?controller=website&page=product_type_search&product_type_name=$product_type_name&p=$p&f=$f&arrange=$arrange' class='focus'>$i</a>";
-                                        }
-                                    }
-                                    else {
-                                        if(isset($_GET['product_type_id'])) {
-                                            echo "<a href='./index.php?controller=website&page=product_type&product_type_id=$product_type_id&p=$p&f=$f&arrange=$arrange'>$i</a>";
-
-                                        }
-                                        elseif(isset($_GET['product_type_name'])) {
-                                            echo "<a href='./index.php?controller=website&page=product_type_search&product_type_name=$product_type_name&p=$p&f=$f&arrange=$arrange'>$i</a>";
-                                        }
-                                    }
+                            for($i = 1; $i <= $numberOfPage; $i++) {
+                                $product_type_id = isset($_GET['product_type_id']) ? $_GET['product_type_id'] : 0;
+                                $product_type_name = isset($_GET['product_type_name']) ? $_GET['product_type_name'] : 0;
+                                $arrange = isset($_GET['arrange']) ? $_GET['arrange'] : '';
+                                $p = $i;
+                                $f = isset($_GET['f']) ? $_GET['f'] : 'f';
+                                if($_GET['p'] == $i) {
+                                    echo "<a href='./index.php?controller=website&page=all_product_type&p=$p&f=$f&arrange=$arrange' class='focus'>$i</a>";
+                                }
+                                else {
+                                    echo "<a href='./index.php?controller=website&page=all_product_type&p=$p&f=$f&arrange=$arrange'>$i</a>";
                                 }
                             }
                             ?>

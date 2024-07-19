@@ -12,7 +12,7 @@ let btnDown = document.querySelector('.product__btn--down');
 
 
 // bat su kien nut len de di chuyen anh len
-btnUp.addEventListener("click", function() {
+btnDown.addEventListener("click", function() {
     let lastImageTop = parseInt(imgSmall[imgSmall.length - 1].style.top);
     if (lastImageTop !== 564) {
         imgSmall.forEach(function(img) {
@@ -24,7 +24,7 @@ btnUp.addEventListener("click", function() {
 
 
 // bat su kien nut xuong de di chuyen anh xuong
-btnDown.addEventListener("click", function() {
+btnUp.addEventListener("click", function() {
     let firstImageTop = parseInt(imgSmall[0].style.top);
     if (firstImageTop !== 0) {
         imgSmall.forEach(function(img) {
@@ -38,16 +38,11 @@ btnDown.addEventListener("click", function() {
 // bat su kien click vao anh de doi anh chinh
 imgSmall.forEach(function(img, index) {
     img.addEventListener("click", function() {
-        let bigImgContainer = document.querySelector('.product__img--big');
-        
-        // Tạo một bản sao của hình ảnh được nhấp vào
-        let imgClone = img.cloneNode(true);
-        
-        // Xóa nội dung cũ của bigImgContainer
-        bigImgContainer.innerHTML = "";
-        
-        // Chèn bản sao vào bigImgContainer
-        bigImgContainer.appendChild(imgClone);
+        let imgSrc = img.getAttribute('src');
+
+        let bigImg = document.querySelector('.product__img--big img');
+
+        bigImg.setAttribute('src', `${imgSrc}`);
     })
 });
 
@@ -176,3 +171,29 @@ productPriceNew.forEach(function(item, index) {
     let formattedPrice = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(productPriceValue);
     productPrice[index].textContent = formattedPrice;
 });
+
+// Zoom ảnh to của sản phẩm
+let imgZoom = document.querySelector('.product__img--big img');
+let zoom = document.getElementById('result__zoom--img');
+let scope = 4;
+
+imgZoom.addEventListener('mousemove', function (e) {
+    zoom.classList.remove('hide');
+
+    zoom.style.top = `${e.clientY}px`;
+    zoom.style.left = `${e.clientX}px`;
+
+    zoom.style.backgroundSize = `1000px 1000px`;
+
+    var percentMouseOfWidth = (e.offsetX / this.offsetWidth) * 100;
+    var percentMouseOfHeight = (e.offsetY / this.offsetHeight) * 100;
+
+    zoom.style.backgroundPosition = `${percentMouseOfWidth}% ${percentMouseOfHeight}%`;
+
+    let imgZoomSource = e.target.getAttribute('src');
+    zoom.style.backgroundImage = `url('${imgZoomSource}')`;
+})
+
+imgZoom.addEventListener('mouseleave', function (e) {
+    zoom.classList.add('hide');
+})

@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teelab</title>
 
+    <!-- link font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="./templates/access/css/style.css">
     <link rel="stylesheet" href="./templates/access/css/base.css">
@@ -49,6 +54,12 @@
                     <?php
                     }
                     ?>
+                    <div class="header__left--category">
+                        <p><a href="./index.php?controller=website&page=all_product_type&p=1&f=f" style="font-weight: 600; font-size: 12px; color: red; line-height: var(--header-height); text-transform: uppercase; margin: 0; border: none;">Tất cả</a></p>                        
+                    </div>
+                    <div class="header__left--category">
+                        <p><a href="https://facebook.com/vu170" style="font-weight: 600; font-size: 12px; color: red; line-height: var(--header-height); text-transform: uppercase; margin: 0; border: none;">Về chúng tôi</a></p>                        
+                    </div>
                 </div>
                 <div class="header__center">
                     <a href="./index.php" class="header__center--logo">

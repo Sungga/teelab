@@ -207,6 +207,11 @@ switch($controller) {
                 break;
             }
 
+            case 'all_product_type': {
+                $CtrlWebsite->allProductType();
+                break;
+            }
+
             case 'product_type_search': {
                 $CtrlWebsite->productTypeSearch();
                 break;

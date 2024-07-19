@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (!(isset($_SESSION['role']) && $_SESSION['role'] == 1)) {
+if (!(isset($_SESSION['role']) || $_SESSION['role'] == 1)) {
     header('Location: ./index.php');
     exit(); // Đảm bảo kết thúc quá trình thực thi sau khi chuyển hướng
 }

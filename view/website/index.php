@@ -6,6 +6,12 @@
             include "./templates/website/footer_website.php";
         }
 
+        public function allProductType($categories, $product_types, $product_type, $category, $products, $colors) {
+            include "./templates/website/header_website.php";
+            include "./templates/website/list_all_product.php";
+            include "./templates/website/footer_website.php";
+        }
+
         public function product($categories, $product_types, $product, $product_type, $category, $product_img_desc, $product_color) {
             include "./templates/website/header_website.php";
             include "./templates/website/product.php";

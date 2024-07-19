@@ -52,7 +52,7 @@ require_once "./view/common/index.php";
                     $_SESSION['role'] = $user_now['role'];
 
                     echo "<script>alert('Đăng nhập thành công!')</script>";
-                    echo '<script>window.location.href = "./index.php";</script>';
+                    echo '<script>window.location.href = "./index.php";</script>'; 
                 }
                 else {
                     echo "<script>alert('Thông tin mật khẩu hoặc tài khoản không chính xác!')</script>";

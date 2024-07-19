@@ -12,7 +12,7 @@
                         <input type="password" name="password" id="" placeholder="Mật khẩu" required>
                     </div>
                     <div class="sign__input">
-                        <span>Nếu chưa có tài khoản, hãy <a href="#">đăng ký!</a></span>
+                        <span>Nếu chưa có tài khoản, hãy <a href="./index.php?controller=common&page=signup">đăng ký!</a></span>
                         <input type="submit" value="Đăng nhập">                    
                     </div>
                 </div>

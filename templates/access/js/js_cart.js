@@ -76,4 +76,4 @@ totalSums.forEach(function(total, index) {
     });
 });
 
-console.log(select);
+// console.log(select);

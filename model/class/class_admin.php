@@ -558,12 +558,12 @@ class admin {
         $result = $this->db->exec($sql);
 
         $revenue = $this->getRevenue($order_completed);
+        echo $revenue;
         // Tang them tong doanh thu cua ngay day
         // neu chua co hang doanh thu cua ngay hom nay thi them hang
         if(empty($revenue)) {
             $sql = "INSERT INTO tbl_revenue (revenue_date, revenue) VALUES ('$order_completed', '$order_total')";
             $result = $this->db->exec($sql);
-            echo "<script>alert('1')</script>";
         }
         // neu co hang du lieu doanh thu ngay hom nay roi thi ta cap nhat doanh thu
         else {
@@ -582,6 +582,14 @@ class admin {
         $sql = "SELECT * FROM tbl_revenue";
 
         $result = $this->db->getRows($sql);
+
+        return $result;
+    }
+
+    public function getRevenue($order_completed) {
+        $sql = "SELECT * FROM tbl_revenue WHERE revenue_date = '$order_completed'";
+
+        $result = $this->db->getRow($sql);
 
         return $result;
     }

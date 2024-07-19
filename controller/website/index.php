@@ -88,6 +88,80 @@ class controllerWebsite {
         }
     }
 
+    public function allProductType() {
+        if(isset($_GET['p']) && $_GET['p'] != '' && isset($_GET['f']) && $_GET['f'] != '') {
+            $categories = $this->model->getCategories();
+            $product_types = $this->model->getProductTypes();
+
+            $product_type = '';
+            $category = '';
+            $colors = $this->model->getColors();
+
+            // loc san pham in ra
+            if($_GET['f'] == 't') {
+                $filterSize = isset($_SESSION['filterSize']) && $_SESSION['filterSize'] != '' ? $_SESSION['filterSize'] : array();
+                $filterColor = isset($_SESSION['filterColor']) && $_SESSION['filterColor'] != '' ? $_SESSION['filterColor'] : array();
+                $filterRange = isset($_SESSION['filterRange']) && $_SESSION['filterRange'] != '' ? $_SESSION['filterRange'] : '';
+                $arr = $this->model->getProducts_filter($filterSize, $filterColor, $filterRange);
+            }
+            else {
+                $arr = $this->model->getProducts();
+            }
+            
+            if(isset($_GET['arrange'])) {
+                $products = $this->changeSortMethod($_GET['arrange'], $arr);
+            }
+            else {
+                $products = $this->model->getProducts();
+            }
+
+            $this->view->allProductType($categories, $product_types, $product_type, $category, $products, $colors);
+            $this->searchProduct();
+
+            if ($_SERVER["REQUEST_METHOD"] == 'POST') {
+                // them san pham vao gio hang
+                if(isset($_POST["size"])) {
+                    if(isset($_SESSION['user_id'])) {
+                        $cart_user_id = $_SESSION['user_id'];
+                        $cart_product_id = $_POST['product_id'];
+                        $cart_size = $_POST["size"];
+                        $cart_color = $_POST["color_product_" . $cart_product_id];
+                        $cart_number = 1;
+
+                        if($this->model->addCart($cart_user_id, $cart_product_id, $cart_size, $cart_color, $cart_number)) {
+                            echo "<script>alert('Thêm vào giỏ thành công');</script>";
+                        }
+                        else {
+                            echo "<script>alert('Thêm vào giỏ không thành công');</script>";
+                        }
+                    }
+                    else {
+                        echo "<script>alert('Bạn cần đăng nhập trước khi thêm giỏ hàng!');</script>";
+                    }
+                }
+
+                // loc san pham hien thi
+                if(isset($_POST['filter'])) {
+                    $_SESSION['filterSize'] = isset($_POST['filterSize']) ? $_POST['filterSize'] : '';
+                    $_SESSION['filterColor'] = isset($_POST['filterColor']) ? $_POST['filterColor'] : '';
+                    $_SESSION['filterRange'] = isset($_POST['filterRange']) ? $_POST['filterRange'] : '';
+
+                    $arrange = isset($_GET['arrange']) ? $_GET['arrange'] : '';
+                    $p = isset($_GET['p']) ? $_GET['p'] : 1;
+                    $f = 't';
+                    
+                    echo "<script>window.location.href = './index.php?controller=website&page=all_product_type&p=$p&f=$f&arrange=$arrange';</script>";
+                }
+
+                // doi cach sap xep san pham
+                $this->selectSortMethod();
+            }
+        }
+        else {
+            header('location: ./index.php');
+        }
+    }
+
     public function productTypeSearch() {
         if((isset($_GET['product_type_name']) && $_GET['product_type_name'] != '') && (isset($_GET['p']) && $_GET['p'] != '') && (isset($_GET['f']) && $_GET['f'] != '')) {
             $categories = $this->model->getCategories();
@@ -184,7 +258,9 @@ class controllerWebsite {
             elseif(isset($_GET['product_type_name'])) {
                 echo "<script>window.location.href = './index.php?controller=website&page=product_type_search&product_type_name=$product_type_name&p=$p&f=$f&arrange=$arrange';</script>";
             }
-            // echo "<script>alert('".$_POST['arrange']."');</script>";
+            else {
+                echo "<script>window.location.href = './index.php?controller=website&page=all_product_type&p=$p&f=$f&arrange=$arrange';</script>";
+            }
         }
     }
     
@@ -281,29 +357,13 @@ class controllerWebsite {
 
     }
 
-    // ham nay duoc goi khi nguoi dung an mua san pham luon ma khong them vao gio hang
-    // public function buyProduct() {
-    //     if(isset($_GET['product_id']) && isset($_GET['size']) && isset($_GET['color']) && isset($_GET['numberInput'])) {
-    //         $list_cart_order = array(
-    //             'cart_id' => "k".$_SESSION['user_id'],
-    //             'cart_product_id' => $_GET['product_id'],
-    //             'cart_size' => $_GET['size'],
-    //             'cart_color' => $_GET['color'],
-    //             'cart_quantity' => $_GET['numberInput']
-    //         );
-    //         $list_cart[] = $list_cart_order;
-    //     }
-    //     else {
-    //         echo '<script>window.location.href = "./index.php"</script>';
-    //     }
-    // }
-
     public function cart() {
         $categories = $this->model->getCategories();
         $product_types = $this->model->getProductTypes();
 
         // truong hop co tai khoan
         if(isset($_SESSION['user_id'])) {
+            $list_cart = array();
             $list_cart = $this->model->getCarts($_SESSION['user_id']);
 
             // Tao mot bien de luu tru xac nhan rang trong gio hang co san pham tam thoi
@@ -319,7 +379,8 @@ class controllerWebsite {
                     'cart_quantity' => $_GET['numberInput']
                 );
                 // Thêm sản phẩm đấy vào giỏ hàng tạm thời
-                $list_cart[] = $list_cart_order;
+                // $list_cart[] = $list_cart_order;
+                array_unshift($list_cart, $list_cart_order);
 
                 // $ProductsOutsideTheCart = 'true';
             }
@@ -330,6 +391,7 @@ class controllerWebsite {
             }
 
             // dao nguoc mang gio hang
+            // $arr_product_cart = array_reverse($list_cart);
             // $arr_product_cart = array_reverse($arr_product_cart);
 
             $colors = $this->model->getColors();
@@ -360,6 +422,7 @@ class controllerWebsite {
             $sizes = array('S', 'M', 'L', 'XL', 'XXL');
         }
         else {
+            echo "<script>alert('Bạn cần đăng nhập mới có thể sử dụng giỏ hàng!');</script>";
             echo '<script>window.location.href = "./index.php"</script>';
         }
 
@@ -386,7 +449,7 @@ class controllerWebsite {
                             $arr['color'] = $_POST['color'.$list_cart_item['cart_id']];
                             $arr['size'] = $_POST['size'.$list_cart_item['cart_id']];
                             $arr['quantity'] = $_POST['quantity'.$list_cart_item['cart_id']];
-                            $arr['total'] = $total;
+                            $arr['total'] = $total + (30000 * $arr['quantity']);
 
                             $listBuy[] = $arr;
                             
@@ -401,7 +464,7 @@ class controllerWebsite {
                     $listBuy = array();
                     if(isset($_POST['checkKA'])) {
                         // Loại bỏ các ký tự không phải số và chuyển đổi thành số nguyên
-                        $total = (int) preg_replace('/[^0-9]/', '', $_POST['total']);
+                        $total = (int) preg_replace('/[^0-9]/', '', $_POST['total'.$list_cart_item['cart_id']]);
 
                         $arr = array();
                         $arr['cart_id'] = 'KA';
@@ -409,7 +472,7 @@ class controllerWebsite {
                         $arr['color'] = $_POST['colorKA'];
                         $arr['size'] = $_POST['sizeKA'];
                         $arr['quantity'] = $_POST['quantityKA'];
-                        $arr['total'] = $total;
+                        $arr['total'] = $total + (30000 * $arr['quantity']);
 
                         $listBuy[] = $arr;
                     }
